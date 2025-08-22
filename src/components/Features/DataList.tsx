@@ -123,13 +123,14 @@ export default function DataList() {
                     display: "flex",
                     alignItems: "center",
                     border: "none",
+                    color: "var(--color-primary)",
                   },
                   "& .MuiOutlinedInput-notchedOutline": {
-                    border: `1px solid text-gray-100`,
+                    border: `1px solid var(--color-primary)`,
                   },
-                  // "& .MuiSvgIcon-root": {
-                  //   color: color,
-                  // },
+                  "& .MuiSvgIcon-root": {
+                    color: "var(--color-primary)",
+                  },
                 }}
               />
               <Button
@@ -143,9 +144,9 @@ export default function DataList() {
             <Grid container spacing={4}>
                 {listedData.map((data, index) => (
                     <Grid size={{ xs: 12, md: 4 }} key={index}>
-                        <div className="bg-white rounded-lg border border-gray-200 p-4 h-full">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 h-full">
                             <h3 className="text-xl font-semibold mb-2">{data.title}</h3>
-                            <p className="text-gray-600">{data.summary}</p>
+                            <p className="text-gray-600 dark:text-gray-400">{data.summary}</p>
                         </div>
                     </Grid>
                 ))}
