@@ -3,16 +3,21 @@
 import StepFrom from "@/components/Features/StepFrom";
 import FormContent from "@/components/Form/FormContent";
 import FormMetadata from "@/components/Form/FormMetadata";
+import FormPreview from "@/components/Form/FormPreview";
 import FormSummaryCategory from "@/components/Form/FormSummaryCategory";
 import Hero from "@/components/Header/Hero";
+import { setDataLocal } from "@/store/reducers/app";
 import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AddPost() {
 	const router = useRouter()
 	const [currentStep, setCurrentStep] = useState<number>(1)
-	const step = ["Infomasi Data", "Konfigurasi Data", "Masukkan Data", "Selesai"]
+	const step = ["Metadata", "Summary & Category", "Content", "Preview", "Finish"]
+  const dispatch = useDispatch();
+  const { dataLocal } = useSelector((state: any) => state.app);
 
   const [dataMain, setDataMain] = useState<any>({});
 
@@ -21,22 +26,19 @@ export default function AddPost() {
     setCurrentStep(next);
   }, []);
 
-  const handleCallbackRow = useCallback((data: any) => {
-    if(data?.isEdit) {
-      setDataMain((prev: any) => ({ 
-        ...prev, 
-        value_row: prev?.value_row?.map((item: any, i: number) => i === data?.dataIndex ? data?.row : item) 
-      }));
-    } else {
-      setDataMain((prev: any) => ({ 
-        ...prev, 
-        value_row: Boolean(prev?.value_row) ? [...prev?.value_row, data?.row] : [data?.row]
-      }));
-    }
-  }, []);
-
   const handleSaveData = () => {
-    console.log(dataMain);
+    if (dataMain) {
+      dispatch(setDataLocal([
+        {
+          id: new Date().getTime(),
+          ...dataMain
+        }, 
+        ...dataLocal
+      ]));
+      setTimeout(() => {
+        setCurrentStep(5);
+      }, 1000);
+    }
   }
 
 
@@ -66,17 +68,28 @@ export default function AddPost() {
             {currentStep === 3 && (
               <FormContent
                 data={dataMain}
-                callbackNext={() => handleSaveData()}
                 callbackBack={() => setCurrentStep(2)}
-                callbackData={handleCallbackRow}
+                callbackNext={(data: any) => handleCallbackFormConfig(data, 4)}
               />
             )}
             {currentStep === 4 && (
+              <FormPreview
+                data={dataMain}
+                callbackNext={() => handleSaveData()}
+                callbackBack={() => setCurrentStep(3)}
+              />
+            )}
+            {currentStep === 5 && (
               <>
                 <div className="mt-8 flex flex-col gap-5">
-                  {"Preview Data"}
+                  <div className="flex flex-col justify-center items-center gap-5">
+                      <div className="flex flex-col gap-2 text-center">
+                          <span className="text-2xl font-medium">Data has been saved!</span>
+                          <span className="text-lg text-gray-500">Click finish to back to home</span>
+                      </div>
+                  </div>
                   <div className="flex justify-center">
-                    <button onClick={() => router.push('/datasets')} className="text-gray-800 bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-primary-500 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Finish</button>
+                    <button onClick={() => router.push('/')} className="text-gray-800 bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-primary-500 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Finish</button>
                   </div>
                 </div>
               </>

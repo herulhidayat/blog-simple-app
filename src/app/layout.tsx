@@ -1,9 +1,13 @@
+'use client';
+
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/styles/theme";
 import { Poppins } from 'next/font/google';
+import { Provider } from "react-redux";
+import store from "@/store";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '700'],
@@ -11,12 +15,6 @@ const poppins = Poppins({
   display: 'swap',
   variable: '--font-poppins',
 });
-
-
-export const metadata: Metadata = {
-  title: "Simple Blog App",
-  description: "",
-};
 
 export default function RootLayout({
   children,
@@ -30,7 +28,9 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            {children}
+            <Provider store={store}>
+              {children}
+            </Provider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
