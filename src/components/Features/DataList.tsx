@@ -10,6 +10,9 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataLocal } from "@/store/reducers/app";
 import { DUMMY_DATA } from "../Config/dummy.config";
+import EditIcon from '@mui/icons-material/Edit';
+
+
 
 export default function DataList() {
   const [listedData, setListedData] = useState<
@@ -93,9 +96,14 @@ export default function DataList() {
       <Grid container spacing={4}>
         {listedData.map((data, index) => (
           <Grid size={{ xs: 12, md: 4 }} key={index}>
-            <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 h-full hover:bg-primary-50 dark:hover:bg-zinc-800 cursor-pointer" onClick={() => router.push(`/${data?.id}`)}>
-              <h3 className="text-xl font-semibold mb-2">{data.title}</h3>
-              <p className="text-zinc-600 dark:text-zinc-400">{data.summary}</p>
+            <div className="hover:relative h-full">
+              <div className="absolute cursor-pointer top-3 right-3 text-sm bg-primary rounded-full w-8 h-8 flex items-center justify-center transition-all scale-80 hover:scale-90" onClick={() => router.push(`/${data?.id}/edit`)}>
+                <EditIcon />
+              </div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 h-full hover:bg-primary-50 dark:hover:bg-zinc-800 cursor-pointer" onClick={() => router.push(`/${data?.id}`)}>
+                <h3 className="text-xl font-semibold mb-2">{data.title}</h3>
+                <p className="text-zinc-600 dark:text-zinc-400">{data.summary}</p>
+              </div>
             </div>
           </Grid>
         ))}

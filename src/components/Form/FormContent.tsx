@@ -26,7 +26,7 @@ export default function FormContent({
             <RichTextEditor
               ref={rteRef}
               extensions={[StarterKit]}
-              content=""
+              content={data.content ?? ""}
               immediatelyRender={true}
               shouldRerenderOnTransaction={false}
               renderControls={() => (
