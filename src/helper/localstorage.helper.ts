@@ -12,7 +12,7 @@ export function getItem(key: string, defaultValue: any = null) {
 }
 
 export function setItem(key: string, value: any) {
-  let data = JSON.stringify(value);
+  const data = JSON.stringify(value);
 
   localStorage.setItem(key, data);
 }
