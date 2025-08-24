@@ -29,22 +29,24 @@ export default function DataList() {
     page: 1,
     size: 9,
   });
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState<string>(OPTIONS_SELECT_CATEGORY[0].value);
   const router = useRouter();
   const dispatch = useDispatch();
   const { dataLocal } = useSelector((state: any) => state.app);
+  const [listData, setListData] = useState<any>([])
   const [listHover, setListHover] = useState<number|null>(null)
+  const [searchValue, setSearchValue] = useState<string>("")
 
   useEffect(() => {
-    if (dataLocal) {
+    if (listData) {
       setListedData(
-        dataLocal?.slice(
+        listData?.slice(
           (pagination.page - 1) * pagination.size,
           pagination.page * pagination.size
         )
       );
     }
-  }, [pagination, dataLocal]);
+  }, [pagination, listData]);
 
   useEffect(() => {
     if(dataLocal?.length === 0) {
@@ -52,13 +54,35 @@ export default function DataList() {
     }
   }, []);
 
+  useEffect(() => {
+    if (dataLocal) {
+      setListData(dataLocal)
+    }
+  }, [dataLocal])
+
+  useEffect(() => {
+    if(searchValue && dataLocal) {
+      setListData(dataLocal?.filter((data:any) => data?.title?.includes(searchValue)))
+    }  else if(searchValue == "") {
+      setListData(dataLocal)
+    }
+  }, [searchValue])
+
+  useEffect(() => {
+    if(category && dataLocal) {
+      setListData(dataLocal?.filter((data:any) => data?.category?.includes(category)))
+    } else if(category == "") {
+      setListData(dataLocal)
+    }
+  }, [category])
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex justify-end gap-5">
-        <Search />
+        <Search defaultValue={searchValue} callbackSearch={(v:any) => setSearchValue(v)}/>
         <SelectStatic
           placeholder="Category"
-          deafultValue={OPTIONS_SELECT_CATEGORY[0].value}
+          deafultValue={category}
           configData={OPTIONS_SELECT_CATEGORY}
           callbackSelected={(value) => setCategory(value.value)}
           style={{
@@ -112,7 +136,7 @@ export default function DataList() {
       <div>
         <PaginationComponent
           itemsPerPage={pagination.size}
-          totalData={dataLocal?.length}
+          totalData={listData?.length}
           callbackPagination={(v) =>
             setPagination((prev) => ({ ...prev, page: v }))
           }
