@@ -33,6 +33,7 @@ export default function DataList() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { dataLocal } = useSelector((state: any) => state.app);
+  const [listHover, setListHover] = useState<number|null>(null)
 
   useEffect(() => {
     if (dataLocal) {
@@ -96,8 +97,8 @@ export default function DataList() {
       <Grid container spacing={4}>
         {listedData.map((data, index) => (
           <Grid size={{ xs: 12, md: 4 }} key={index}>
-            <div className="hover:relative h-full">
-              <div className="absolute cursor-pointer top-3 right-3 text-sm bg-primary rounded-full w-8 h-8 flex items-center justify-center transition-all scale-80 hover:scale-90" onClick={() => router.push(`/${data?.id}/edit`)}>
+            <div className="relative h-full" onMouseEnter={() => setListHover(data?.id)} onMouseLeave={() => setListHover(null)}>
+              <div className={`absolute cursor-pointer top-3 right-3 text-sm bg-primary rounded-full w-8 h-8 flex items-center justify-center transition-all scale-80 hover:scale-90 opacity-30 hover:opacity-100 ${listHover == data?.id ? "visible" : "hidden"}`} onClick={() => router.push(`/${data?.id}/edit`)}>
                 <EditIcon />
               </div>
               <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 h-full hover:bg-primary-50 dark:hover:bg-zinc-800 cursor-pointer" onClick={() => router.push(`/${data?.id}`)}>
