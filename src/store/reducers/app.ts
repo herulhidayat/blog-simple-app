@@ -1,4 +1,4 @@
-import { getItem, setItem } from '@/app/helper/localstorage.helper';
+import { getItem, setItem } from '@/helper/localstorage.helper';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
