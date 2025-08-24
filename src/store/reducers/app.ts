@@ -2,7 +2,7 @@ import { getItem, setItem } from '@/helper/localstorage.helper';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  dataLocal: getItem('dataLocal'),
+  dataLocal: typeof window !== "undefined" ? getItem("dataLocal") : null,
 };
 
 export const appSlice = createSlice({
