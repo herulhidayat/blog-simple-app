@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 export default function PostPage() {
   const { dataLocal } = useSelector((state: any) => state.app);
   const params = useParams();
-  console.log(dataLocal?.find((item: any) => item.id === parseInt(params.id as string)));
   return (
     <>
       <Hero title={dataLocal?.find((item: any) => item.id === parseInt(params.id as string))?.title} description={dataLocal?.find((item: any) => item.id === parseInt(params.id as string))?.author} />
